@@ -41,6 +41,15 @@ spec:
             port: 5000
           initialDelaySeconds: 10
           periodSeconds: 10
+      - name: logger
+        image: busybox
+        command: ['sh', '-c', 'tail -n 100 -f /var/log/backend.log']
+        volumeMounts:
+        - name: log-volume
+          mountPath: /var/log
+      volumes:
+      - name: log-volume
+        emptyDir: {}
 ---
 apiVersion: v1
 kind: Service

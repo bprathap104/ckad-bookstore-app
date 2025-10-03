@@ -1,4 +1,5 @@
-from flask import Flask, jsonify
+from flask import Flask, request, jsonify
+import logging
 import os
 import psycopg2
 from flask_cors import CORS
@@ -10,6 +11,22 @@ DB_NAME = os.environ.get("DB_NAME", "bookstoredb")
 
 app = Flask(__name__)
 CORS(app)
+
+# Setup logging to /var/log/backend.log
+log_file_path = "/var/log/backend.log"
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s %(levelname)s: %(message)s',
+    handlers=[
+        logging.FileHandler(log_file_path),
+        logging.StreamHandler()
+    ]
+)
+
+@app.before_request
+def log_request_info():
+    if request.path != "/health":
+        logging.info(f"{request.remote_addr} {request.method} {request.path}")
 
 def get_conn():
     return psycopg2.connect(
