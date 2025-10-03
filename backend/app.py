@@ -14,19 +14,16 @@ CORS(app)
 
 # Setup logging to /var/log/backend.log
 log_file_path = "/var/log/backend.log"
-logging.basicConfig(
-    level=logging.INFO,
-    format='%(asctime)s %(levelname)s: %(message)s',
-    handlers=[
-        logging.FileHandler(log_file_path),
-        logging.StreamHandler()
-    ]
-)
+file_handler = logging.FileHandler(log_file_path)
+file_handler.setLevel(logging.INFO)
+file_handler.setFormatter(logging.Formatter('%(asctime)s %(levelname)s: %(message)s'))
+app.logger.addHandler(file_handler)
+app.logger.setLevel(logging.INFO)
 
 @app.before_request
 def log_request_info():
     if request.path != "/health":
-        logging.info(f"{request.remote_addr} {request.method} {request.path}")
+        app.logger.info(f"{request.remote_addr} {request.method} {request.path}")
 
 def get_conn():
     return psycopg2.connect(
