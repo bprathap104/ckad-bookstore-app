@@ -37,6 +37,11 @@ def init_db():
                     title VARCHAR(255) NOT NULL,
                     author VARCHAR(255) NOT NULL
                 );
+                CREATE TABLE IF NOT EXISTS orders (
+                    id SERIAL PRIMARY KEY,
+                    order_date DATE NOT NULL,
+                    total_amount NUMERIC(10, 2) NOT NULL
+                );
             """)
             cur.execute("SELECT COUNT(*) FROM books;")
             count = cur.fetchone()[0]

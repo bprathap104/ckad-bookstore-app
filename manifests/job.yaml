@@ -1,0 +1,26 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: generate-sales-report
+  namespace: bookstore-app
+spec:
+  template:
+    metadata:
+      name: generate-sales-report
+    spec:
+      containers:
+      - name: sales-report
+        image: bprathap104/bookstore-backend:1.9
+        env:
+        - name: DB_HOST
+          value: postgres-svc
+        - name: DB_USER
+          value: bookstore
+        - name: DB_PASS
+          value: bookstore123
+        - name: DB_NAME
+          value: bookstoredb
+        command: ["python", "generate_sales_report.py"]
+      restartPolicy: OnFailure
+  backoffLimit: 4
+  activeDeadlineSeconds: 200

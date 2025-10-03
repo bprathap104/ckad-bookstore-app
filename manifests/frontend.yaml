@@ -27,10 +27,10 @@ metadata:
   name: frontend-svc
   namespace: bookstore-app
 spec:
-  type: NodePort
+  type: ClusterIP
   selector:
     app: bookstore-frontend
   ports:
   - port: 80
     targetPort: 80
-    nodePort: 30080
+#    nodePort: 30080
