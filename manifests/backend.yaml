@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
       - name: backend
-        image: bprathap104/bookstore-backend:1.3
+        image: bprathap104/bookstore-backend:1.4
         env:
         - name: DB_HOST
           value: postgres-svc
@@ -27,6 +27,9 @@ spec:
           value: bookstore123
         - name: DB_NAME
           value: bookstoredb
+        volumeMounts:
+        - name: log-volume
+          mountPath: /var/log
         ports:
         - containerPort: 5000
         readinessProbe:

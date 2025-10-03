@@ -14,11 +14,7 @@ CORS(app)
 
 # Setup logging to /var/log/backend.log
 log_file_path = "/var/log/backend.log"
-file_handler = logging.FileHandler(log_file_path)
-file_handler.setLevel(logging.INFO)
-file_handler.setFormatter(logging.Formatter('%(asctime)s %(levelname)s: %(message)s'))
-app.logger.addHandler(file_handler)
-app.logger.setLevel(logging.INFO)
+logging.basicConfig(filename=log_file_path, level=logging.INFO, format='%(asctime)s %(levelname)s: %(message)s')
 
 @app.before_request
 def log_request_info():
