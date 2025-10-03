@@ -15,9 +15,22 @@ spec:
       labels:
         app: bookstore-backend
     spec:
+      initContainers:
+      - name: init-db
+        image: bprathap104/bookstore-backend:1.7
+        env:
+        - name: DB_HOST
+          value: postgres-svc
+        - name: DB_USER
+          value: bookstore
+        - name: DB_PASS
+          value: bookstore123
+        - name: DB_NAME
+          value: bookstoredb
+        command: ["python", "init_db.py"]
       containers:
       - name: backend
-        image: bprathap104/bookstore-backend:1.4
+        image: bprathap104/bookstore-backend:1.7
         env:
         - name: DB_HOST
           value: postgres-svc

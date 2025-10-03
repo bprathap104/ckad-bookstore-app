@@ -11,7 +11,7 @@ function App() {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    fetch('/api/books')
+    fetch('/books')
       .then(response => {
         if (!response.ok) {
           throw new Error('Failed to fetch books');

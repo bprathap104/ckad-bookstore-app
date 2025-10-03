@@ -29,61 +29,12 @@ def get_conn():
         dbname=DB_NAME
     )
 
-def init_db():
-    try:
-        conn = get_conn()
-        with conn.cursor() as cur:
-            cur.execute("""
-                CREATE TABLE IF NOT EXISTS books (
-                    id SERIAL PRIMARY KEY,
-                    title VARCHAR(255) NOT NULL,
-                    author VARCHAR(255) NOT NULL
-                );
-            """)
-            cur.execute("SELECT COUNT(*) FROM books;")
-            count = cur.fetchone()[0]
-            if count == 0:
-                cur.execute("""
-                    INSERT INTO books (title, author) VALUES
-                    ('CKAD Essentials', 'OpenAI'),
-                    ('Kubernetes Deep Dive', 'Cloud Guru'),
-                    ('Docker Mastery', 'Bret Fisher'),
-                    ('Microservices Patterns', 'Chris Richardson'),
-                    ('The Phoenix Project', 'Gene Kim');
-                """)
-            conn.commit()
-        conn.close()
-    except Exception as e:
-        print(f"DB init failed: {e}")
 
-init_db()
 
 @app.route("/books", methods=["GET"])
 def get_books():
     try:
         conn = get_conn()
-        # Ensure DB is initialized
-        with conn.cursor() as cur:
-            cur.execute("SELECT COUNT(*) FROM information_schema.tables WHERE table_name = 'books';")
-            if cur.fetchone()[0] == 0:
-                # Init DB
-                cur.execute("""
-                    CREATE TABLE books (
-                        id SERIAL PRIMARY KEY,
-                        title VARCHAR(255) NOT NULL,
-                        author VARCHAR(255) NOT NULL
-                    );
-                """)
-                cur.execute("""
-                    INSERT INTO books (title, author) VALUES
-                    ('CKAD Essentials', 'OpenAI'),
-                    ('Kubernetes Deep Dive', 'Cloud Guru'),
-                    ('Docker Mastery', 'Bret Fisher'),
-                    ('Microservices Patterns', 'Chris Richardson'),
-                    ('The Phoenix Project', 'Gene Kim');
-                """)
-                conn.commit()
-        # Now fetch books
         with conn.cursor() as cur:
             cur.execute("SELECT id, title, author FROM books;")
             rows = cur.fetchall()
