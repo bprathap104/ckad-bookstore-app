@@ -1,41 +1,43 @@
 apiVersion: batch/v1
 kind: CronJob
 metadata:
-  name: cleanup-old-orders
+  name: generate-sales-report
   namespace: bookstore-app
 spec:
-  schedule: "0 2 * * *"  # Runs daily at 2 AM
+  schedule: "0 0 * * *" # runs daily at midnight
   jobTemplate:
     spec:
       template:
         metadata:
-          name: cleanup-old-orders
+          labels:
+            app: generate-sales-report
         spec:
+          serviceAccountName: default
           containers:
-          - name: cleanup
-            image: bprathap104/bookstore-backend:1.9
-            env:
-            - name: DB_HOST
-              valueFrom:
-                configMapKeyRef:
-                  name: bookstore-config
-                  key: db-host
-            - name: POSTGRES_USER
-              valueFrom:
-                secretKeyRef:
-                  name: db-secret
-                  key: db-username
-            - name: POSTGRES_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: db-secret
-                  key: db-password
-            - name: DB_NAME
-              valueFrom:
-                configMapKeyRef:
-                  name: bookstore-config
-                  key: db-name
-            command: ["python", "cleanup_old_orders.py"]
+            - name: sales-report
+              image: bprathap104/bookstore-backend:1.9
+              env:
+                - name: DB_HOST
+                  valueFrom:
+                    configMapKeyRef:
+                      name: bookstore-config
+                      key: db-host
+                - name: DB_USER
+                  valueFrom:
+                    secretKeyRef:
+                      name: db-secret
+                      key: db-username
+                - name: DB_PASS
+                  valueFrom:
+                    secretKeyRef:
+                      name: db-secret
+                      key: db-password
+                - name: DB_NAME
+                  valueFrom:
+                    configMapKeyRef:
+                      name: bookstore-config
+                      key: db-name
+              command: ["python", "generate_sales_report.py"]
           restartPolicy: OnFailure
   successfulJobsHistoryLimit: 3
   failedJobsHistoryLimit: 1

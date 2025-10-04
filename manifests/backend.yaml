@@ -24,12 +24,12 @@ spec:
             configMapKeyRef:
               name: bookstore-config
               key: db-host
-        - name: POSTGRES_USER
+        - name: DB_USER
           valueFrom:
             secretKeyRef:
               name: db-secret
               key: db-username
-        - name: POSTGRES_PASSWORD
+        - name: DB_PASS
           valueFrom:
             secretKeyRef:
               name: db-secret
@@ -47,12 +47,12 @@ spec:
         env:
         - name: DB_HOST
           value: postgres-svc
-        - name: POSTGRES_USER
+        - name: DB_USER
           valueFrom:
             secretKeyRef:
               name: db-secret
               key: db-username
-        - name: POSTGRES_PASSWORD
+        - name: DB_PASS
           valueFrom:
             secretKeyRef:
               name: db-secret

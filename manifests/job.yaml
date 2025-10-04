@@ -1,15 +1,15 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: generate-sales-report
+  name: cleanup-old-orders
   namespace: bookstore-app
 spec:
   template:
     metadata:
-      name: generate-sales-report
+      name: cleanup-old-orders
     spec:
       containers:
-      - name: sales-report
+      - name: cleanup-orders
         image: bprathap104/bookstore-backend:1.9
         env:
         - name: DB_HOST
@@ -17,12 +17,12 @@ spec:
             configMapKeyRef:
               name: bookstore-config
               key: db-host
-        - name: POSTGRES_USER
+        - name: DB_USER
           valueFrom:
             secretKeyRef:
               name: db-secret
               key: db-username
-        - name: POSTGRES_PASSWORD
+        - name: DB_PASS
           valueFrom:
             secretKeyRef:
               name: db-secret
@@ -32,7 +32,7 @@ spec:
             configMapKeyRef:
               name: bookstore-config
               key: db-name
-        command: ["python", "generate_sales_report.py"]
+        command: ["python", "cleanup_old_orders.py"]
       restartPolicy: OnFailure
   backoffLimit: 4
   activeDeadlineSeconds: 200
