@@ -10,7 +10,7 @@ spec:
       template:
         metadata:
           labels:
-            app: generate-sales-report
+            app: bookstore-backend
         spec:
           serviceAccountName: default
           containers:

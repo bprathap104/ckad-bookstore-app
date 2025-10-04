@@ -21,7 +21,7 @@ spec:
           name: frontend-nginx-config
       containers:
       - name: frontend
-        image: bprathap104/bookstore-frontend:1.8
+        image: bprathap104/bookstore-frontend:1.11
         resources: {}
         ports:
         - containerPort: 80

@@ -15,9 +15,10 @@ spec:
       labels:
         app: bookstore-backend
     spec:
+      serviceAccountName: backend-sa
       initContainers:
       - name: init-db
-        image: bprathap104/bookstore-backend:1.9
+        image: bprathap104/bookstore-backend:1.10
         env:
         - name: DB_HOST
           valueFrom:
@@ -42,7 +43,7 @@ spec:
         command: ["python", "init_db.py"]
       containers:
       - name: backend
-        image: bprathap104/bookstore-backend:1.9
+        image: bprathap104/bookstore-backend:1.10
         resources: {}
         env:
         - name: DB_HOST
