@@ -1,0 +1,10 @@
+apiVersion: bookstore-app.io/v1
+kind: BookOrder
+metadata:
+  name: order-101
+  namespace: bookstore-app
+spec:
+  customerName: "Alice"
+  bookTitle: "Kubernetes in Action"
+  quantity: 2
+  status: "Pending"
