@@ -20,24 +20,43 @@ spec:
         image: bprathap104/bookstore-backend:1.9
         env:
         - name: DB_HOST
-          value: postgres-svc
-        - name: DB_USER
-          value: bookstore
-        - name: DB_PASS
-          value: bookstore123
+          valueFrom:
+            configMapKeyRef:
+              name: bookstore-config
+              key: db-host
+        - name: POSTGRES_USER
+          valueFrom:
+            secretKeyRef:
+              name: db-secret
+              key: db-username
+        - name: POSTGRES_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: db-secret
+              key: db-password
         - name: DB_NAME
-          value: bookstoredb
+          valueFrom:
+            configMapKeyRef:
+              name: bookstore-config
+              key: db-name
         command: ["python", "init_db.py"]
       containers:
       - name: backend
         image: bprathap104/bookstore-backend:1.9
+        resources: {}
         env:
         - name: DB_HOST
           value: postgres-svc
-        - name: DB_USER
-          value: bookstore
-        - name: DB_PASS
-          value: bookstore123
+        - name: POSTGRES_USER
+          valueFrom:
+            secretKeyRef:
+              name: db-secret
+              key: db-username
+        - name: POSTGRES_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: db-secret
+              key: db-password
         - name: DB_NAME
           value: bookstoredb
         volumeMounts:
@@ -60,6 +79,7 @@ spec:
       - name: logger
         image: busybox
         command: ['sh', '-c', 'touch /var/log/backend.log && tail -n 100 -f /var/log/backend.log']
+        resources: {}
         volumeMounts:
         - name: log-volume
           mountPath: /var/log

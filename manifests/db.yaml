@@ -45,16 +45,26 @@ spec:
         image: postgres:15-alpine
         env:
         - name: POSTGRES_USER
-          value: bookstore
+          valueFrom:
+            secretKeyRef:
+              name: db-secret
+              key: db-username
         - name: POSTGRES_PASSWORD
-          value: bookstore123
+          valueFrom:
+            secretKeyRef:
+              name: db-secret
+              key: db-password
         - name: POSTGRES_DB
-          value: bookstoredb
+          valueFrom:
+            configMapKeyRef:
+              name: bookstore-config
+              key: db-name
         ports:
         - containerPort: 5432
         volumeMounts:
         - mountPath: /var/lib/postgresql/data
           name: postgres-storage
+        resources: {}
       volumes:
       - name: postgres-storage
         persistentVolumeClaim:

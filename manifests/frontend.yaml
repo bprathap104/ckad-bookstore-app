@@ -18,6 +18,7 @@ spec:
       containers:
       - name: frontend
         image: bprathap104/bookstore-frontend:1.8
+        resources: {}
         ports:
         - containerPort: 80
 ---
