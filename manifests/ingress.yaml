@@ -7,8 +7,13 @@ metadata:
     nginx.ingress.kubernetes.io/rewrite-target: /
 spec:
   ingressClassName: nginx
+  tls:
+  - hosts:
+    - bookstore.local
+    secretName: bookstore-tls
   rules:
-  - http:
+  - host: bookstore.local
+    http:
       paths:
       - path: /
         pathType: Prefix
